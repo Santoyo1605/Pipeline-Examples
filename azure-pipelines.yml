@@ -19,21 +19,21 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pytest tests
+    pytest tests --junitxml=TEST-results.xml
   displayName: 'Run tests'
 
 - task: PublishTestResults@2
   inputs:
-    testResultsFiles: '**/TEST-*.xml'
+    testResultsFiles: '**/TEST-results.xml'
     testRunTitle: 'Test Results'
-  
+
 - task: CopyFiles@2
   inputs:
-    contents: '**/main.py'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    contents: '**/src/**'
+    targetFolder: '$(Build.ArtifactStagingDirectory)/src'
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'drop'
+    pathToPublish: '$(Build.ArtifactStagingDirectory)/src'
+    artifactName: 'src'
